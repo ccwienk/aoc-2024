@@ -33,6 +33,13 @@ def main():
     for scores in reports:
         if check_scores(scores):
             safe_count += 1
+        else:
+            for rm_idx in range(len(scores)):
+                cp = list(scores)
+                del cp[rm_idx]
+                if check_scores(cp):
+                    safe_count += 1
+                    break
 
     print(f'{safe_count=}')
 
