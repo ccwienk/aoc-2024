@@ -30,23 +30,30 @@ def main():
         return rows[y][x]
 
     def collect_antinodes(a: tuple[int, int], b: tuple[int, int]):
-        ax, ay = a
-        bx, by = b
+        for scale in range(50):
+            ax, ay = a
+            bx, by = b
 
-        # calculate vector
-        vx = ax - bx
-        vy = ay - by
+            # calculate vector
+            vx = scale * (ax - bx)
+            vy = scale * (ay - by)
 
-        first_candidate = ax + vx, ay + vy
-        second_candidate = bx - vx, by - vy
+            first_candidate = ax + vx, ay + vy
+            second_candidate = bx - vx, by - vy
 
-        for candidate in first_candidate, second_candidate:
-            try:
-                get(*candidate)
-                antinodes.add(candidate)
-            except IndexError:
-                # coordinates outside limits, -> discard
-                pass
+            discarded_candidates = 0
+
+            for candidate in first_candidate, second_candidate:
+                try:
+                    get(*candidate)
+                    antinodes.add(candidate)
+                except IndexError:
+                    # coordinates outside limits, -> discard
+                    discarded_candidates += 1
+                    pass
+
+            if discarded_candidates >= 2:
+                break # give up to avoid unnecessary iterations
 
     for _, acoords in antenna_coords.items():
         for a, b in itertools.combinations(acoords, 2):
