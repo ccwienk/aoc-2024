@@ -13,7 +13,11 @@ class Equation:
     operands: list[int, ...]
 
 
-available_operators = operator.add, operator.mul
+def concat(l, r):
+    return int(f'{l}{r}')
+
+
+available_operators = operator.add, operator.mul, concat
 
 
 def has_solution(eq: Equation):
@@ -50,14 +54,17 @@ def main():
 
 
     total = 0
+    count = 0
 
     for eq in equations:
         if not has_solution(eq):
             continue
 
         total += eq.result
+        count += 1
 
     print(f'{total=}')
+    print(f'{count=} of {len(equations)}')
 
 
 if __name__ == '__main__':
